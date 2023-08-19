@@ -17,8 +17,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/fralonra/ppd-editor
-        tag: v0.1.1
-        commit: 0ddee8ea1f860d8f10e1ac6477328a4e8d91ae50
+        tag: v0.1.1_1
+        commit: 5c875e4194c1ce120c4629d9e7ab6a12f6d9f127
       - cargo-sources.json
     buildsystem: simple
     build-commands:
