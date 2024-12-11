@@ -1,6 +1,6 @@
 app-id: io.github.fralonra.PpdEditor
 runtime: org.freedesktop.Platform
-runtime-version: '22.08'
+runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -12,22 +12,30 @@ finish-args:
   - --share=ipc
   - --socket=x11
 
+build-options:
+  env:
+    EDITOR_ID: "io.github.fralonra.PpdEditor"
+    VIEWER_ID: "io.github.fralonra.PpdViewer"
+
 modules:
   - name: ppd-editor
     sources:
       - type: git
         url: https://github.com/fralonra/ppd-editor
-        tag: v0.1.1_1
-        commit: 5c875e4194c1ce120c4629d9e7ab6a12f6d9f127
+        tag: v0.1.2_1
+        commit: 55940bcf321741eeabf45c12baf73f0ec3c3e273
       - cargo-sources.json
     buildsystem: simple
     build-commands:
       - cargo --offline fetch --manifest-path Cargo.toml --verbose
-      - GIT_COMMIT_HASH=$(git rev-parse --short HEAD) cargo --offline build --release --bin ppd-editor --verbose
+      - GIT_COMMIT_HASH=$(git rev-parse --short HEAD) cargo --offline build --release --features flatpak --verbose
       - install -Dm755 target/release/ppd-editor           /app/bin/ppd-editor
-      - install -Dm644 build/linux/PpdEditor.desktop       /app/share/applications/${FLATPAK_ID}.desktop
-      - install -Dm644 build/linux/PpdEditor.metainfo.xml  /app/share/metainfo/${FLATPAK_ID}.metainfo.xml
-      - install -Dm644 build/logo/ppd-editor.svg           /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      - install -Dm755 target/release/ppd-viewer           /app/bin/ppd-viewer
+      - install -Dm644 build/linux/PpdEditor.desktop       /app/share/applications/${EDITOR_ID}.desktop
+      - install -Dm644 build/linux/PpdViewer.desktop       /app/share/applications/${VIEWER_ID}.desktop
+      - install -Dm644 build/linux/PpdEditor.metainfo.xml  /app/share/metainfo/${EDITOR_ID}.metainfo.xml
+      - install -Dm644 build/logo/ppd-editor.svg           /app/share/icons/hicolor/scalable/apps/${EDITOR_ID}.svg
+      - install -Dm644 build/logo/ppd-viewer.svg           /app/share/icons/hicolor/scalable/apps/${VIEWER_ID}.svg
     build-options:
       append-path: /usr/lib/sdk/rust-stable/bin
       env:
